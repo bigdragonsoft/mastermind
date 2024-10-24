@@ -58,6 +58,10 @@ const char *COLORS[NUM_COLORS] = {"Red", "Blue", "Green", "Yellow", "Purple", "O
 
 int useColorBlocks = 1; // 默认使用色块
 
+/*
+ * 清除屏幕
+ * 根据操作系统使用不同的清屏命令
+ */
 void clearScreen() {
     #ifdef _WIN32
         system("cls");
@@ -66,6 +70,14 @@ void clearScreen() {
     #endif
 }
 
+/*
+ * 生成随机颜色代码
+ * 参数:
+ *   code[]: 用于存储生成的颜色代码的数组
+ * 说明:
+ *   - 生成4个不重复的随机颜色
+ *   - 颜色范围从0到7
+ */
 void generateCode(int code[]) {
     int used[NUM_COLORS] = {0};
     int count = 0;
@@ -79,6 +91,12 @@ void generateCode(int code[]) {
     }
 }
 
+/*
+ * 打印颜色指南
+ * 说明:
+ *   - 显示所有可用的颜色及其对应的数字
+ *   - 根据当前显示模式使用色块或数字显示
+ */
 void printColorGuide() {
     printf("\nColor Guide:\n");
     for (int i = 0; i < NUM_COLORS; i++) {
@@ -96,6 +114,18 @@ void printColorGuide() {
     printf("\n");
 }
 
+/*
+ * 获取用户猜测
+ * 参数:
+ *   guess[]: 存储用户猜测的数组
+ *   guesses[][]: 历史猜测记录
+ *   results[][]: 历史猜测结果
+ *   attempts: 当前尝试次数
+ * 说明:
+ *   - 处理用户输入的颜色猜测
+ *   - 支持切换显示模式(r键)和退出游戏(q键)
+ *   - 验证输入的有效性
+ */
 void getGuess(int guess[], int guesses[][CODE_LENGTH], int results[][2], int attempts) {
     char input[100];
     
@@ -154,6 +184,17 @@ void getGuess(int guess[], int guesses[][CODE_LENGTH], int results[][2], int att
     }
 }
 
+/*
+ * 检查猜测结果
+ * 参数:
+ *   code[]: 正确的颜色代码
+ *   guess[]: 用户的猜测
+ *   correctPosition: 位置和颜色都正确的数量
+ *   correctNumber: 颜色正确但位置错误的数量
+ * 说明:
+ *   - 计算完全匹配的颜色数量
+ *   - 计算颜色正确但位置错误的数量
+ */
 void checkGuess(int code[], int guess[], int *correctPosition, int *correctNumber) {
     *correctPosition = 0;
     *correctNumber = 0;
@@ -176,6 +217,17 @@ void checkGuess(int code[], int guess[], int *correctPosition, int *correctNumbe
     }
 }
 
+/*
+ * 打印游戏面板
+ * 参数:
+ *   guesses[][]: 历史猜测记录
+ *   results[][]: 历史猜测结果
+ *   attempts: 当前尝试次数
+ * 说明:
+ *   - 显示游戏标题和版本信息
+ *   - 显示所有历史猜测记录
+ *   - 显示每次猜测的结果提示
+ */
 void printBoard(int guesses[][CODE_LENGTH], int results[][2], int attempts) {
     clearScreen();
     printf("\n");
@@ -227,6 +279,13 @@ void printBoard(int guesses[][CODE_LENGTH], int results[][2], int attempts) {
     printf("\n");
 }
 
+/*
+ * 打印版本信息
+ * 说明:
+ *   - 显示游戏版本号
+ *   - 显示作者信息
+ *   - 显示联系方式和网站
+ */
 void printVersionInfo() {
     printf("Mastermind Game v%s\n", VERSION);
     printf("Author: %s\n", AUTHOR);
@@ -235,14 +294,25 @@ void printVersionInfo() {
     printf("Copyright (C) 2024 BigDragonSoft.com\n");
 }
 
+/*
+ * 打印使用说明
+ * 说明:
+ *   - 显示游戏的主要特性
+ *   - 显示命令行参数说明
+ *   - 显示基本操作指南
+ */
 void printUsage() {
     printf("Mastermind Game\n\n");
-    printf("This is a console-based Mastermind game. Main features include:\n");
-    printf("1. 4-digit color/number code\n");
-    printf("2. 8 different colors/numbers\n");
-    printf("3. 10 attempts\n");
-    printf("4. Random color/number code generation and validation system\n");
-    printf("5. User-friendly command-line interface\n\n");
+    printf("This is a traditional console-based Mastermind game. The rules are as follows:\n");
+    printf("1. The game will generate a 4-digit color/number code\n");
+    printf("2. The range of colors/numbers is from 1 to 8\n");
+    printf("3. The player has 10 chances to guess the code\n");
+    printf("4. After each guess, the system will provide hints:\n");
+    printf("   - Green plus sign (+) indicates both color and position are correct\n");
+    printf("   - Red minus sign (-) indicates the color is correct but the position is wrong\n");
+    printf("5. The player needs to gradually guess the correct code based on the hints\n");
+    printf("6. During the game, you can enter 'r' at any time to switch display mode (color blocks/numbers)\n");
+    printf("7. During the game, you can enter 'q' at any time to exit the game\n\n");
     printf("Usage:\n");
     printf("  ./mastermind         Start the game (use color blocks)\n");
     printf("  ./mastermind -n      Start the game (use numbers)\n");
@@ -251,6 +321,17 @@ void printUsage() {
     printf("\nFor more information, please use 'man mastermind' to view the game manual page\n");
 }
 
+/*
+ * 主函数
+ * 参数:
+ *   argc: 命令行参数数量
+ *   argv: 命令行参数数组
+ * 说明:
+ *   - 处理命令行参数
+ *   - 初始化游戏
+ *   - 实现主游戏循环
+ *   - 处理游戏结束和重新开始
+ */
 int main(int argc, char *argv[]) {
     srand(time(NULL));
     
