@@ -78,9 +78,9 @@ void printColorGuide() {
     printf("\nColor Guide:\n");
     for (int i = 0; i < NUM_COLORS; i++) {
         if (useColorBlocks) {
-            printf("%d: %s %s", i + 1, COLOR_CODES[i], COLORS[i]);
+            printf("%s %d: %-6s ", COLOR_CODES[i], i + 1, COLORS[i]);
         } else {
-            printf("%d: %s", i + 1, COLORS[i]);
+            printf("%d: %-6s ", i + 1, COLORS[i]);
         }
         if (i % 4 == 3 || i == NUM_COLORS - 1) {
             printf("\n");
@@ -166,14 +166,16 @@ void checkGuess(int code[], int guess[], int *correctPosition, int *correctNumbe
 void printBoard(int guesses[][CODE_LENGTH], int results[][2], int attempts) {
     clearScreen();
     printf("\n");
-    printf("         -----------\n");
-    printf("         Mastermind\n");
-    printf("         -----------\n");
-    printf("           v%s\n\n", VERSION);
+    //printf("         -----------\n");
+    printf("\033[1;32m\n");  // 设置亮绿色
+    printf("             Mastermind\n");
+    printf("\033[0m");  // 重置颜色
+    printf("             -----------\n");
+    printf("               v%s\n\n", VERSION);
 
     
-    printf("No.   Guess           Hints\n");
-    printf("--------------------------------\n");
+    printf("No.   Guess               Hints\n");
+    printf("----------------------------------------\n");
     
     for (int i = 0; i < MAX_ATTEMPTS; i++) {
         printf("%2d    ", i + 1);
@@ -188,9 +190,9 @@ void printBoard(int guesses[][CODE_LENGTH], int results[][2], int attempts) {
             
             // 调整提示符号的起始位置
             if (useColorBlocks) {
-                printf("    ");
+                printf("        ");
             } else {
-                printf("        ");  // 额外的空格来对齐
+                printf("            ");  // 额外的空格来对齐
             }
             
             for (int j = 0; j < results[i][0]; j++) {
@@ -201,13 +203,13 @@ void printBoard(int guesses[][CODE_LENGTH], int results[][2], int attempts) {
             }
         } else {
             if (useColorBlocks) {
-                printf("                ");
+                printf("                    ");
             } else {
-                printf("                    ");  // 额外的空格来对齐
+                printf("                        ");  // 额外的空格来对齐
             }
         }
         printf("\n");
-        printf("--------------------------------\n"); // 每行的分割线
+        printf("----------------------------------------\n"); // 每行的分割线
     }
     printf("\n");
 }
