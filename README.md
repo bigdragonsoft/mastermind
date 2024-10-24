@@ -24,6 +24,7 @@ Players need to input the corresponding number (1-8) to select a color.
 
 - Enter 4 different numbers (1-8) to guess the color sequence.
 - Enter 'q' at any time to quit the game.
+- Enter 'r' at any time to toggle the display mode between colored blocks and numbers.
 - After each game, you can choose to play again.
 - By default, the game displays colors using colored blocks. To use numbers to represent colors, add the `-n` parameter when starting the game.
 

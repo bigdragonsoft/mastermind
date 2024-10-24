@@ -36,6 +36,11 @@
 #define EMAIL "bigdragonsoft@gmail.com"
 #define WEBSITE "https://github.com/bigdragonsoft/mastermind"
 
+// 函数声明
+void printBoard(int guesses[][CODE_LENGTH], int results[][2], int attempts);
+void getGuess(int guess[], int guesses[][CODE_LENGTH], int results[][2], int attempts);
+
+
 // 定义颜色的ANSI转义序列
 const char *COLOR_CODES[NUM_COLORS] = {
     "\033[0;41m  \033[0m", // 红
@@ -91,12 +96,14 @@ void printColorGuide() {
     printf("\n");
 }
 
-void getGuess(int guess[]) {
+void getGuess(int guess[], int guesses[][CODE_LENGTH], int results[][2], int attempts) {
     char input[100];
-    printColorGuide();
     
     while (1) {
-        printf("Enter %d different colors (1-8), or 'q' to quit: ", CODE_LENGTH);
+        printBoard(guesses, results, attempts);
+        printColorGuide();
+        
+        printf("Input %d different colors (1-8), 'r' to switch display mode, or 'q' to exit: ", CODE_LENGTH);
         
         if (fgets(input, sizeof(input), stdin) == NULL) {
             printf("Invalid input. Please try again.\n");
@@ -111,9 +118,15 @@ void getGuess(int guess[]) {
             return;
         }
         
+        if (input[0] == 'r' || input[0] == 'R') {
+            useColorBlocks = !useColorBlocks;  // 切换显示模式
+            printf("Display mode changed to %s.\n", useColorBlocks ? "color blocks" : "numbers");
+            continue;  // 继续循环，这将导致重新打印游戏板和颜色指南
+        }
+        
         size_t len = strlen(input);
         if (len != CODE_LENGTH) {
-            printf("Please enter exactly %d numbers. You entered %zu characters.\n", CODE_LENGTH, len);
+            printf("Please enter %d numbers. You entered %zu characters.\n", CODE_LENGTH, len);
             continue;
         }
         
@@ -136,7 +149,7 @@ void getGuess(int guess[]) {
         if (valid) {
             break;
         } else {
-            printf("Invalid input. Please enter %d different numbers between 1 and 8.\n", CODE_LENGTH);
+            printf("Invalid input. Please enter %d different numbers, ranging from 1 to 8.\n", CODE_LENGTH);
         }
     }
 }
@@ -275,13 +288,11 @@ int main(int argc, char *argv[]) {
         generateCode(code);
         
         while (attempts < MAX_ATTEMPTS) {
-            printBoard(guesses, results, attempts);
-            
-            getGuess(guess);
+            getGuess(guess, guesses, results, attempts);
             
             if (guess[0] == -1) {  // 用户输入了 'q'
                 printf("Game exited.\n");
-                return 0;  // 直接退出程序
+                return 0;
             }
             
             // 存储猜测
