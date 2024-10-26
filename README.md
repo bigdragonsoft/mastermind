@@ -26,7 +26,7 @@ Players need to input the corresponding number (1-8) to select a color.
 
 ## Game Screenshot
 
-色块模式和数字模式对比
+Comparison between Color Block Mode and Number Mode
 <div style="display: flex; justify-content: space-between;">
     <img src="./screenshot.png" width="48%" alt="色块模式截图">
     <img src="./screenshot_number.png" width="48%" alt="数字模式截图">
