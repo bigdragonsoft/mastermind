@@ -198,20 +198,30 @@ void getGuess(int guess[], int guesses[][CODE_LENGTH], int results[][2], int att
 void checkGuess(int code[], int guess[], int *correctPosition, int *correctNumber) {
     *correctPosition = 0;
     *correctNumber = 0;
-    int codeCopy[NUM_COLORS] = {0};
-    int guessCopy[NUM_COLORS] = {0};
     
     // 首先检查位置和颜色都正确的情况
     for (int i = 0; i < CODE_LENGTH; i++) {
         if (code[i] == guess[i]) {
             (*correctPosition)++;
-        } else {
+        }
+    }
+    
+    // 如果全部正确，直接返回
+    if (*correctPosition == CODE_LENGTH) {
+        return;
+    }
+    
+    // 否则继续检查颜色正确但位置错误的情况
+    int codeCopy[NUM_COLORS] = {0};
+    int guessCopy[NUM_COLORS] = {0};
+    
+    for (int i = 0; i < CODE_LENGTH; i++) {
+        if (code[i] != guess[i]) {
             codeCopy[code[i]]++;
             guessCopy[guess[i]]++;
         }
     }
     
-    // 然后检查颜色正确但位置错误的情况
     for (int i = 0; i < NUM_COLORS; i++) {
         *correctNumber += (codeCopy[i] < guessCopy[i]) ? codeCopy[i] : guessCopy[i];
     }
@@ -394,7 +404,7 @@ int main(int argc, char *argv[]) {
             }
         }
         
-        if (attempts == MAX_ATTEMPTS) {
+        if (correctPosition != CODE_LENGTH) {
             printBoard(guesses, results, attempts);
             printf("Sorry, you didn't guess the correct answer in %d attempts.\n", MAX_ATTEMPTS);
             printf("The correct answer was: ");
